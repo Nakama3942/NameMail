@@ -1,13 +1,25 @@
-from mail import Mail
+from mail import MailSMTP, MailIMAP
 from smtp import *
 from config import *
 
-if __name__ == "__main__":
+
+def TestSMTP():
     with open('message.txt', 'r') as file:
         message = file.read()
 
-    gmail = Mail(SMTPHost.gmail.value, SMTPPort.gmail.value)
+    gmail = MailSMTP(SMTPHost.gmail.value, SMTPPort.gmail.value)
     gmail.server_login(mail, password)
     gmail.create_message('valentynkalynovskyi@gmail.com', 'Just a test', message)
     gmail.add_image('image.jpg')
     gmail.send()
+
+
+def TestIMAP():
+    imail = MailIMAP(SMTPHost.gmail.value)
+    imail.server_login(mail, password)
+    imail.get_message()
+
+
+if __name__ == "__main__":
+    TestSMTP()
+    TestIMAP()
