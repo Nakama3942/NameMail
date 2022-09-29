@@ -3,31 +3,34 @@ from email import encoders
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
-from config import *
+
+# Origin source: https://www.youtube.com/watch?v=mWZYn5I_jkY
 
 
 class Mail:
-    def __init__(self, mail_host: str = 'smtp.gmail.com', mail_port: int = 465):
+    def __init__(self, mail_host: str, mail_port: int):
         self.server = smtplib.SMTP_SSL(mail_host, mail_port)
+        self.mail: str = ""
+        self.password: str = ""
+        self.msg: MIMEMultipart = MIMEMultipart()
+        self.to_mail: str = ""
 
-    def server_login(self):
+    def server_login(self, mail_address: str, mail_password: str):
+        self.mail = mail_address
+        self.password = mail_password
         self.server.ehlo()
-        self.server.login(mail, password)
+        self.server.login(self.mail, self.password)
 
-    def messaging(self):
+    def create_message(self, to_address: str, mail_subject: str, message: str):
+        self.to_mail = to_address
         # Формування листа
-        msg = MIMEMultipart()
-        msg['From'] = 'Nakama3942'
-        msg['To'] = 'valentynkalynovskyi@gmail.com'
-        msg['Subject'] = 'Just a test'
+        self.msg['From'] = self.mail.split('@')[0]
+        self.msg['To'] = self.to_mail
+        self.msg['Subject'] = mail_subject
+        self.msg.attach(MIMEText(message, 'plain'))
 
-        with open('message.txt', 'r') as file:
-            message = file.read()
-
-        msg.attach(MIMEText(message, 'plain'))
-
+    def add_image(self, image_name: str):
         # Додання зображення
-        image_name = 'image.jpg'
         attacment = open(image_name, 'rb')
 
         p = MIMEBase('application', 'octet-stream')
@@ -35,8 +38,9 @@ class Mail:
 
         encoders.encode_base64(p)
         p.add_header('Content-Disposition', f'attachment; filename={image_name}')
-        msg.attach(p)
+        self.msg.attach(p)
 
+    def send(self):
         # Відправка листа
-        text = msg.as_string()
-        self.server.sendmail(mail, 'valentynkalynovskyi@gmail.com', text)
+        text = self.msg.as_string()
+        self.server.sendmail(self.mail, self.to_mail, text)
