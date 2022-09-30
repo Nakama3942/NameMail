@@ -14,14 +14,18 @@ class MailSMTP:
         self.server = smtplib.SMTP_SSL(mail_host, mail_port)
         self.mail: str = ""
         self.password: str = ""
+        self.anonymous: bool = False
         self.msg: MIMEMultipart = MIMEMultipart()
         self.to_mail: str = ""
 
-    def server_login(self, mail_address: str, mail_password: str):
+    def server_login(self, mail_address: str, mail_password: str, anonymous: bool = False):
         self.mail = mail_address
         self.password = mail_password
         self.server.ehlo()
-        self.server.login(self.mail, self.password)
+        if anonymous:
+            self.anonymous = anonymous
+        else:
+            self.server.login(self.mail, self.password)
 
     def create_message(self, to_address: str, mail_subject: str, message: str):
         self.to_mail = to_address
@@ -45,7 +49,15 @@ class MailSMTP:
     def send(self):
         # Відправка листа
         text = self.msg.as_string()
-        self.server.sendmail(self.mail, self.to_mail, text)
+        try:
+            self.server.sendmail(self.mail, self.to_mail, text)
+            print("The message has been sent.")
+        except smtplib.SMTPSenderRefused:
+            if self.anonymous:
+                print("The server does not support the ability to send anonymous messages!")
+
+    def close(self):
+        self.server.quit()
 
 
 class MailIMAP:
@@ -75,3 +87,6 @@ class MailIMAP:
                     msg = email.message_from_string(str(arr[1], 'utf-8'))
                     print('From : ' + msg['from'] + '\n')
                     print('Subject : ' + msg['subject'] + '\n')
+
+    def close(self):
+        self.server.quit()

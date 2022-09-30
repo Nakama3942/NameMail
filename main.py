@@ -12,14 +12,16 @@ def TestSMTP():
     gmail.create_message('valentynkalynovskyi@gmail.com', 'Just a test', message)
     gmail.add_image('image.jpg')
     gmail.send()
+    gmail.close()
 
 
 def TestIMAP():
     imail = MailIMAP(SMTPHost.gmail.value)
     imail.server_login(mail, password)
     imail.get_message()
+    imail.close()
 
 
 if __name__ == "__main__":
     TestSMTP()
-    TestIMAP()
+    # TestIMAP()
