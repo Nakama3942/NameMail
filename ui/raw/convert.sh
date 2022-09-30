@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-pyuic6 -x NameMail.ui -o namemail.py
+pyuic6 -x NameMail.ui -o ui_namemail.py

@@ -1,19 +1,13 @@
-from mail import MailSMTP, MailIMAP
-from smtp import *
-from config import *
-
-from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QApplication, QMainWindow
 import sys
-
-from ui.namemail import Ui_NameMail
+# from mail import MailSMTP, MailIMAP
+# from smtp import *
+# from config import *
+from ui.namemail import *
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    NameMail = QMainWindow()
-    ui = Ui_NameMail()
-    ui.setupUi(NameMail)
-    NameMail.show()
+    ui = NameMail()
+    ui.show()
     sys.exit(app.exec())
 
 # def TestSMTP():
