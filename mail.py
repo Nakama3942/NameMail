@@ -7,16 +7,20 @@ from email.mime.multipart import MIMEMultipart
 import imaplib
 import email
 
+# Origin source:
+#   https://www.youtube.com/watch?v=mWZYn5I_jkY
+#   https://codehandbook.org/how-to-read-email-from-gmail-using-python/
+#   (VPN:) https://www.dmosk.ru/instruktions.php?object=python-mail
+
 
 class MailSMTP:
-    # Origin source: https://www.youtube.com/watch?v=mWZYn5I_jkY
     def __init__(self, mail_host: str, mail_port: int):
         self.server = smtplib.SMTP_SSL(mail_host, mail_port)
         self.mail: str = ""
         self.password: str = ""
         self.anonymous: bool = False
         self.msg: MIMEMultipart = MIMEMultipart()
-        self.to_mail: str = ""
+        self.to_mail: list[str] = []
 
     def server_login(self, mail_address: str, mail_password: str, anonymous: bool = False):
         self.mail = mail_address
@@ -27,11 +31,11 @@ class MailSMTP:
         else:
             self.server.login(self.mail, self.password)
 
-    def create_message(self, to_address: str, mail_subject: str, message: str):
+    def create_message(self, to_address: list[str], mail_subject: str, message: str):
         self.to_mail = to_address
         # Формування листа
         self.msg['From'] = self.mail.split('@')[0]
-        self.msg['To'] = self.to_mail
+        self.msg['To'] = ', '.join(self.to_mail)
         self.msg['Subject'] = mail_subject
         self.msg.attach(MIMEText(message, 'plain'))
 
@@ -61,7 +65,6 @@ class MailSMTP:
 
 
 class MailIMAP:
-    # Origin source: https://codehandbook.org/how-to-read-email-from-gmail-using-python/
     def __init__(self, mail_host: str):
         self.server = imaplib.IMAP4_SSL(mail_host)
         self.mail: str = ""
