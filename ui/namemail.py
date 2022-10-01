@@ -12,10 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from PyQt6 import QtWidgets, QtCore, uic
+from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
 from ui.raw.ui_namemail import Ui_NameMail
+
+from src.mail import *
+from src.smtp import SMTPHost
+from src.config import mail, password
 
 # Origin source:
 #   https://www.pythonguis.com/tutorials/first-steps-qt-creator/
@@ -28,7 +32,7 @@ def buttSend_Released():
 
 def listLetters_Activated(aitem: QtWidgets.QListWidgetItem):
     # todo Реалізувати вікно перегляду повідомлення
-    print("Not available! 222 + " + str(aitem.text()))
+    print("Not available! + " + str(aitem.text()))
 
 
 class NameMail(QMainWindow, Ui_NameMail):
@@ -41,5 +45,9 @@ class NameMail(QMainWindow, Ui_NameMail):
         self.listLetters.activated.connect(lambda: listLetters_Activated(self.listLetters.currentItem()))
 
         # Формування списку повідомлень
-        for item in range(10):
-            self.listLetters.addItem("Item: " + str(item))
+        get_mail = MailIMAP(SMTPHost.gmail.value)
+        get_mail.server_login(mail, password)
+        messages = get_mail.get_messages()
+        for item in messages:
+            self.listLetters.addItem(QtWidgets.QListWidgetItem(f"From : {str(email.header.make_header(email.header.decode_header(item['from'])))}\nSubject : {str(email.header.make_header(email.header.decode_header(item['subject'])))}"))
+        get_mail.close()

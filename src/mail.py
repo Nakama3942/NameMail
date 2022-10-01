@@ -61,7 +61,7 @@ class MailSMTP:
                 print("The server does not support the ability to send anonymous messages!")
 
     def close(self):
-        self.server.quit()
+        self.server.close()
 
 
 class MailIMAP:
@@ -69,27 +69,28 @@ class MailIMAP:
         self.server = imaplib.IMAP4_SSL(mail_host)
         self.mail: str = ""
         self.password: str = ""
-        self.messages: list = []
+        self.messages: list[email.message] = []
 
     def server_login(self, mail_address: str, mail_password: str):
         self.mail = mail_address
         self.password = mail_password
         self.server.login(self.mail, self.password)
 
-    def get_message(self):
+    def get_messages(self) -> list[email.message]:
         self.server.select('INBOX')
 
         _, data = self.server.search(None, 'ALL')
         id_list = data[0].split()
 
-        for item in range(int(id_list[-1]), int(id_list[0]), -1):
+        for item in range(int(id_list[-1]), int(id_list[0]), -1)[:20]:
             data = self.server.fetch(str(item), '(RFC822)')
             for response_part in data:
                 arr = response_part[0]
                 if isinstance(arr, tuple):
-                    msg = email.message_from_string(str(arr[1], 'utf-8'))
-                    print('From : ' + msg['from'] + '\n')
-                    print('Subject : ' + msg['subject'] + '\n')
+                    message = email.message_from_string(str(arr[1], 'utf-8'))
+                    self.messages.append(message)
+
+        return self.messages
 
     def close(self):
-        self.server.quit()
+        self.server.close()

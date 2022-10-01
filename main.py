@@ -1,7 +1,5 @@
 import sys
-# from mail import MailSMTP, MailIMAP
-# from smtp import *
-# from config import *
+from src import *
 from ui.namemail import *
 
 if __name__ == "__main__":
@@ -24,10 +22,3 @@ if __name__ == "__main__":
 #     gmail.add_image('image.jpg')
 #     gmail.send()
 #     gmail.close()
-#
-#
-# def TestIMAP():
-#     imail = MailIMAP(SMTPHost.gmail.value)
-#     imail.server_login(mail, password)
-#     imail.get_message()
-#     imail.close()
