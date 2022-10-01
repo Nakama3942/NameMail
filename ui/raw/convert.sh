@@ -13,3 +13,4 @@
 # limitations under the License.
 
 pyuic6 -x NameMail.ui -o ui_namemail.py
+pyuic6 -x Reviewer.ui -o ui_reviewer.py
