@@ -17,6 +17,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 
 from ui.raw.ui_namemail import Ui_NameMail
 from ui.reviewer import Reviewer
+from ui.sender import Sender
 
 from src.mail import *
 from src.smtp import SMTPHost
@@ -29,8 +30,9 @@ from src.config import mail, password
 class NameMail(QMainWindow, Ui_NameMail):
     def __init__(self):
         super(NameMail, self).__init__()
-        self.ui = None
         self.setupUi(self)
+        self.reviewer = None
+        self.sender = None
 
         # Об'єданння графічних елементів зі слотами
         self.buttSend.released.connect(lambda: self.buttSend_Released())
@@ -51,9 +53,9 @@ class NameMail(QMainWindow, Ui_NameMail):
         get_mail.close()
 
     def buttSend_Released(self):
-        # todo Реалізувати вікно відправлення повідомлення
-        print("Not available! 111")
+        self.sender = Sender()
+        self.sender.show()
 
     def listLetters_Activated(self, number_item: int):
-        self.ui = Reviewer(number_item, self.message_from[number_item], self.message_subject[number_item])
-        self.ui.show()
+        self.reviewer = Reviewer(number_item, self.message_from[number_item], self.message_subject[number_item])
+        self.reviewer.show()

@@ -53,10 +53,9 @@ class MailSMTP:
         text = self.msg.as_string()
         try:
             self.server.sendmail(self.mail, self.to_mail, text)
-            print("The message has been sent.")
         except smtplib.SMTPSenderRefused:
             if self.anonymous:
-                print("The server does not support the ability to send anonymous messages!")
+                raise TimeoutError("The server does not support the ability to send anonymous messages!")
 
     def close(self):
         self.server.close()
