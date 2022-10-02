@@ -1,11 +1,9 @@
 import smtplib
-from email import encoders
+import imaplib
+import email
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
-
-import imaplib
-import email
 
 # Origin source:
 #   https://www.youtube.com/watch?v=mWZYn5I_jkY
@@ -46,7 +44,7 @@ class MailSMTP:
         p = MIMEBase('application', 'octet-stream')
         p.set_payload(attacment.read())
 
-        encoders.encode_base64(p)
+        email.encoders.encode_base64(p)
         p.add_header('Content-Disposition', f'attachment; filename={image_name}')
         self.msg.attach(p)
 
@@ -70,15 +68,15 @@ class MailIMAP:
         self.mail: str = ""
         self.password: str = ""
         self.messages: list[email.message] = []
+        self.message: list[str] = []
 
     def server_login(self, mail_address: str, mail_password: str):
         self.mail = mail_address
         self.password = mail_password
         self.server.login(self.mail, self.password)
-
-    def get_messages(self) -> list[email.message]:
         self.server.select('INBOX')
 
+    def get_messages(self) -> list[email.message]:
         _, data = self.server.search(None, 'ALL')
         id_list = data[0].split()
 
@@ -91,6 +89,24 @@ class MailIMAP:
                     self.messages.append(message)
 
         return self.messages
+
+    def get_message(self, number_message: int) -> list[str]:
+        _, data = self.server.search(None, 'ALL')
+        id_list = data[0].split()
+        select_message = id_list[len(id_list) - number_message - 1]
+
+        _, data = self.server.fetch(select_message, '(RFC822)')
+        raw_email_string = data[0][1].decode('utf-8')
+
+        email_message = email.message_from_string(raw_email_string)
+
+        if email_message.is_multipart():
+            for payload in email_message.get_payload():
+                self.message.append(payload.get_payload(decode=True).decode('utf-8'))
+        else:
+            self.message.append(email_message.get_payload(decode=True).decode('utf-8'))
+
+        return self.message
 
     def close(self):
         self.server.close()

@@ -40,8 +40,14 @@ class NameMail(QMainWindow, Ui_NameMail):
         get_mail = MailIMAP(SMTPHost.gmail.value)
         get_mail.server_login(mail, password)
         messages = get_mail.get_messages()
+        self.message_from: list[str] = []
+        self.message_subject: list[str] = []
         for item in messages:
-            self.listLetters.addItem(QtWidgets.QListWidgetItem(f"From : {email.header.make_header(email.header.decode_header(item['from']))}\nSubject : {email.header.make_header(email.header.decode_header(item['subject']))}"))
+            item_from = str(email.header.make_header(email.header.decode_header(item['from'])))
+            item_subject = str(email.header.make_header(email.header.decode_header(item['subject'])))
+            self.listLetters.addItem(QtWidgets.QListWidgetItem(f"From : {item_from}\nSubject : {item_subject}"))
+            self.message_from.append(item_from)
+            self.message_subject.append(item_subject)
         get_mail.close()
 
     def buttSend_Released(self):
@@ -49,5 +55,5 @@ class NameMail(QMainWindow, Ui_NameMail):
         print("Not available! 111")
 
     def listLetters_Activated(self, number_item: int):
-        self.ui = Reviewer()
+        self.ui = Reviewer(number_item, self.message_from[number_item], self.message_subject[number_item])
         self.ui.show()

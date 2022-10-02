@@ -40,15 +40,38 @@
             <height>30</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
           <property name="text">
-           <string>Send</string>
+           <string>To write a letter</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="listLetters"/>
+       <widget class="QListWidget" name="listLetters">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="gridSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="batchSize">
+         <number>100</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

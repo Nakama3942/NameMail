@@ -25,10 +25,18 @@ class Ui_NameMail(object):
         self.horizontalLayout.addItem(spacerItem)
         self.buttSend = QtWidgets.QPushButton(self.centralwidget)
         self.buttSend.setMinimumSize(QtCore.QSize(150, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.buttSend.setFont(font)
         self.buttSend.setObjectName("buttSend")
         self.horizontalLayout.addWidget(self.buttSend)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.listLetters = QtWidgets.QListWidget(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.listLetters.setFont(font)
+        self.listLetters.setGridSize(QtCore.QSize(0, 100))
+        self.listLetters.setBatchSize(100)
         self.listLetters.setObjectName("listLetters")
         self.verticalLayout.addWidget(self.listLetters)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
@@ -47,7 +55,7 @@ class Ui_NameMail(object):
     def retranslateUi(self, NameMail):
         _translate = QtCore.QCoreApplication.translate
         NameMail.setWindowTitle(_translate("NameMail", "NameMail"))
-        self.buttSend.setText(_translate("NameMail", "Send"))
+        self.buttSend.setText(_translate("NameMail", "To write a letter"))
 
 
 if __name__ == "__main__":

@@ -19,6 +19,14 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="labelFrom">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
         <property name="text">
          <string>From</string>
         </property>
@@ -26,13 +34,30 @@
       </item>
       <item>
        <widget class="QLabel" name="labelSubject">
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <italic>true</italic>
+          <bold>false</bold>
+          <underline>false</underline>
+          <strikeout>false</strikeout>
+          <kerning>true</kerning>
+         </font>
+        </property>
         <property name="text">
          <string>Subject</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QTextBrowser" name="textMail"/>
+       <widget class="QTextBrowser" name="textMail">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

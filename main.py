@@ -1,5 +1,4 @@
 import sys
-from src import *
 from ui.namemail import *
 
 if __name__ == "__main__":
