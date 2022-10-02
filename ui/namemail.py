@@ -12,9 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from threading import Thread
+
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
+import src.mail
 from ui.raw.ui_namemail import Ui_NameMail
 from ui.reviewer import Reviewer
 from ui.sender import Sender
@@ -33,6 +36,12 @@ class NameMail(QMainWindow, Ui_NameMail):
         self.setupUi(self)
         self.reviewer = None
         self.sender = None
+        self.message_from: list[str] = []
+        self.message_subject: list[str] = []
+
+        self.progressbar = QtWidgets.QProgressBar()
+        self.progressbar.setMaximum(19)
+        self.statusbar.addWidget(self.progressbar)
 
         # Об'єданння графічних елементів зі слотами
         self.buttSend.released.connect(lambda: self.buttSend_Released())
@@ -40,10 +49,14 @@ class NameMail(QMainWindow, Ui_NameMail):
 
         # Формування списку повідомлень
         get_mail = MailIMAP(SMTPHost.gmail.value)
+        mail_thread = Thread(target=self.get_message, args=(get_mail,))
+        mail_thread.start()
+        progres_thread = Thread(target=self.progress_bar_reboot, args=(get_mail,))
+        progres_thread.start()
+
+    def get_message(self, get_mail: src.mail.MailIMAP):
         get_mail.server_login(mail, password)
         messages = get_mail.get_messages()
-        self.message_from: list[str] = []
-        self.message_subject: list[str] = []
         for item in messages:
             item_from = str(email.header.make_header(email.header.decode_header(item['from'])))
             item_subject = str(email.header.make_header(email.header.decode_header(item['subject'])))
@@ -51,6 +64,10 @@ class NameMail(QMainWindow, Ui_NameMail):
             self.message_from.append(item_from)
             self.message_subject.append(item_subject)
         get_mail.close()
+
+    def progress_bar_reboot(self, get_mail: src.mail.MailIMAP):
+        while get_mail.current_number_message < 20:
+            self.progressbar.setValue(get_mail.current_number_message)
 
     def buttSend_Released(self):
         self.sender = Sender()

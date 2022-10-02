@@ -66,6 +66,7 @@ class MailIMAP:
         self.server = imaplib.IMAP4_SSL(mail_host)
         self.mail: str = ""
         self.password: str = ""
+        self.current_number_message: int = 0
         self.messages: list[email.message] = []
         self.message: list[str] = []
 
@@ -80,6 +81,7 @@ class MailIMAP:
         id_list = data[0].split()
 
         for item in range(int(id_list[-1]), int(id_list[0]), -1)[:20]:
+            self.current_number_message += 1
             data = self.server.fetch(str(item), '(RFC822)')
             for response_part in data:
                 arr = response_part[0]
