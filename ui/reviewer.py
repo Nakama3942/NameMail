@@ -12,14 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from PyQt6 import QtWidgets, uic
+from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
 from ui.raw.ui_reviewer import Ui_Reviewer
 
 from src.mail import *
 from src.smtp import SMTPHost
-from src.config import mail, password
+from src.config import mail_login, mail_password
 
 
 class Reviewer(QMainWindow, Ui_Reviewer):
@@ -28,7 +28,7 @@ class Reviewer(QMainWindow, Ui_Reviewer):
         self.setupUi(self)
 
         get_mail = MailIMAP(SMTPHost.gmail.value)
-        get_mail.server_login(mail, password)
+        get_mail.server_login(mail_login, mail_password)
         get_mail.get_list()
         get_mail.get_message(number_mail)
         message: str = ""

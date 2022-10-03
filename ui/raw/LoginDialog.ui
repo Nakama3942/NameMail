@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginDialog</class>
+ <widget class="QDialog" name="LoginDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>250</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Login</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="labelMessage">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;The application is not logged into the mail service. Please enter&lt;br/&gt;your account login and password of the mail application&lt;/span&gt;&lt;br/&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;Account&lt;/span&gt; &amp;gt;&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Security&lt;/span&gt; &amp;gt;&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Account Login&lt;/span&gt; &amp;gt;&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Application passwords&lt;/span&gt;:&lt;br/&gt;in &amp;quot;&lt;span style=&quot; font-style:italic;&quot;&gt;Select an application&lt;/span&gt;&amp;quot; &amp;quot;&lt;span style=&quot; font-style:italic;&quot;&gt;mail&lt;/span&gt;&amp;quot; must beselected, and in &amp;quot;&lt;span style=&quot; font-style:italic;&quot;&gt;select device&lt;/span&gt;&amp;quot; the&lt;br/&gt;type must be selected device from which the program is launched)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Login</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Mail address</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Password</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEmail"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="linePassword"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Abort|QDialogButtonBox::Apply</set>
+       </property>
+       <property name="centerButtons">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

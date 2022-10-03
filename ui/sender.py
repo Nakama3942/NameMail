@@ -12,14 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from PyQt6 import QtWidgets, uic
+from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 
 from ui.raw.ui_sender import Ui_Sender
 
 from src.mail import MailSMTP
 from src.smtp import SMTPHost, SMTPPort
-from src.config import mail, password
+from src.config import mail_login, mail_password
 
 
 class Sender(QMainWindow, Ui_Sender):
@@ -103,7 +103,7 @@ class Sender(QMainWindow, Ui_Sender):
 
     def buttSend_Clicked(self):
         gmail = MailSMTP(SMTPHost.gmail.value, SMTPPort.gmail.value)
-        gmail.server_login(mail, password)
+        gmail.server_login(mail_login, mail_password)
         gmail.create_message(self.lineWhom.text().split(', '), self.lineSubject.text(), self.textMessage.toPlainText())
         if self.imageAddress.text() != "":
             gmail.add_image(self.imageAddress.text())

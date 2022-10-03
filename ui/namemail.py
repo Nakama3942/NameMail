@@ -14,17 +14,16 @@
 
 from threading import Thread
 
-from PyQt6 import QtWidgets, uic
+from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
-import src.mail
 from ui.raw.ui_namemail import Ui_NameMail
 from ui.reviewer import Reviewer
 from ui.sender import Sender
 
 from src.mail import *
 from src.smtp import SMTPHost
-from src.config import mail, password
+from src.config import mail_login, mail_password
 
 # Origin source:
 #   https://www.pythonguis.com/tutorials/first-steps-qt-creator/
@@ -51,15 +50,15 @@ class NameMail(QMainWindow, Ui_NameMail):
         mail_thread = Thread(target=self.get_message, args=(get_mail,))
         mail_thread.start()
 
-    def get_message(self, get_mail: src.mail.MailIMAP):
-        get_mail.server_login(mail, password)
+    def get_message(self, get_mail: MailIMAP):
+        get_mail.server_login(mail_login, mail_password)
         get_mail.get_list()
         progres_thread = Thread(target=self.progress_bar_reboot, args=(get_mail,))
         progres_thread.start()
         get_mail.get_messages()
         get_mail.close()
 
-    def progress_bar_reboot(self, get_mail: src.mail.MailIMAP):
+    def progress_bar_reboot(self, get_mail: MailIMAP):
         self.progressbar.setMaximum(len(get_mail.id_list) - 1)
         current_number_of_rocessed_list_id = len(get_mail.messages)
         while current_number_of_rocessed_list_id < len(get_mail.id_list) - 1:
