@@ -66,7 +66,7 @@ class MailIMAP:
         self.server = imaplib.IMAP4_SSL(mail_host)
         self.mail: str = ""
         self.password: str = ""
-        self.current_number_message: int = 0
+        self.id_list = None
         self.messages: list[email.message] = []
         self.message: list[str] = []
 
@@ -76,12 +76,12 @@ class MailIMAP:
         self.server.login(self.mail, self.password)
         self.server.select('INBOX')
 
-    def get_messages(self) -> list[email.message]:
+    def get_list(self):
         _, data = self.server.search(None, 'ALL')
-        id_list = data[0].split()
+        self.id_list = data[0].split()
 
-        for item in range(int(id_list[-1]), int(id_list[0]), -1)[:20]:
-            self.current_number_message += 1
+    def get_messages(self):
+        for item in range(int(self.id_list[-1]), int(self.id_list[0]), -1):
             data = self.server.fetch(str(item), '(RFC822)')
             for response_part in data:
                 arr = response_part[0]
@@ -89,12 +89,8 @@ class MailIMAP:
                     message = email.message_from_string(str(arr[1], 'utf-8'))
                     self.messages.append(message)
 
-        return self.messages
-
-    def get_message(self, number_message: int) -> list[str]:
-        _, data = self.server.search(None, 'ALL')
-        id_list = data[0].split()
-        select_message = id_list[len(id_list) - number_message - 1]
+    def get_message(self, number_message: int):
+        select_message = self.id_list[len(self.id_list) - number_message - 1]
 
         _, data = self.server.fetch(select_message, '(RFC822)')
         raw_email_string = data[0][1].decode('utf-8')
@@ -106,8 +102,6 @@ class MailIMAP:
                 self.message.append(payload.get_payload(decode=True).decode('utf-8'))
         else:
             self.message.append(email_message.get_payload(decode=True).decode('utf-8'))
-
-        return self.message
 
     def close(self):
         self.server.close()

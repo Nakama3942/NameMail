@@ -40,7 +40,6 @@ class NameMail(QMainWindow, Ui_NameMail):
         self.message_subject: list[str] = []
 
         self.progressbar = QtWidgets.QProgressBar()
-        self.progressbar.setMaximum(19)
         self.statusbar.addWidget(self.progressbar)
 
         # Об'єданння графічних елементів зі слотами
@@ -51,23 +50,27 @@ class NameMail(QMainWindow, Ui_NameMail):
         get_mail = MailIMAP(SMTPHost.gmail.value)
         mail_thread = Thread(target=self.get_message, args=(get_mail,))
         mail_thread.start()
-        progres_thread = Thread(target=self.progress_bar_reboot, args=(get_mail,))
-        progres_thread.start()
 
     def get_message(self, get_mail: src.mail.MailIMAP):
         get_mail.server_login(mail, password)
-        messages = get_mail.get_messages()
-        for item in messages:
-            item_from = str(email.header.make_header(email.header.decode_header(item['from'])))
-            item_subject = str(email.header.make_header(email.header.decode_header(item['subject'])))
-            self.listLetters.addItem(QtWidgets.QListWidgetItem(f"From : {item_from}\nSubject : {item_subject}"))
-            self.message_from.append(item_from)
-            self.message_subject.append(item_subject)
+        get_mail.get_list()
+        progres_thread = Thread(target=self.progress_bar_reboot, args=(get_mail,))
+        progres_thread.start()
+        get_mail.get_messages()
         get_mail.close()
 
     def progress_bar_reboot(self, get_mail: src.mail.MailIMAP):
-        while get_mail.current_number_message < 20:
-            self.progressbar.setValue(get_mail.current_number_message)
+        self.progressbar.setMaximum(len(get_mail.id_list) - 1)
+        current_number_of_rocessed_list_id = len(get_mail.messages)
+        while current_number_of_rocessed_list_id < len(get_mail.id_list) - 1:
+            if current_number_of_rocessed_list_id < len(get_mail.messages):
+                self.progressbar.setValue(current_number_of_rocessed_list_id := len(get_mail.messages))
+
+                item_from = str(email.header.make_header(email.header.decode_header(get_mail.messages[-1]['from'])))
+                item_subject = str(email.header.make_header(email.header.decode_header(get_mail.messages[-1]['subject'])))
+                self.listLetters.addItem(QtWidgets.QListWidgetItem(f"From : {item_from}\nSubject : {item_subject}"))
+                self.message_from.append(item_from)
+                self.message_subject.append(item_subject)
 
     def buttSend_Released(self):
         self.sender = Sender()

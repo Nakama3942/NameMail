@@ -29,11 +29,12 @@ class Reviewer(QMainWindow, Ui_Reviewer):
 
         get_mail = MailIMAP(SMTPHost.gmail.value)
         get_mail.server_login(mail, password)
-        part_message = get_mail.get_message(number_mail)
+        get_mail.get_list()
+        get_mail.get_message(number_mail)
         message: str = ""
-        if len(part_message) > 1:
-            part_message = part_message[1:]
-        for item in part_message:
+        if len(get_mail.message) > 1:
+            get_mail.message = get_mail.message[1:]
+        for item in get_mail.message:
             message += item
         self.labelFrom.setText(message_from)
         self.labelSubject.setText(message_subject)
