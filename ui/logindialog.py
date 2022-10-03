@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import os
 import configparser
 
 from PyQt6 import QtWidgets
@@ -24,7 +25,13 @@ from src.smtp import SMTPHost
 
 
 class LoginDialog(QDialog, Ui_Dialog):
+    """
+    The LoginDialog class inherits from the QDialog class and the Ui_Dialog class
+    """
     def __init__(self):
+        """
+        Initializes the dialog box class that is displayed if there is no configuration file
+        """
         super(LoginDialog, self).__init__()
         self.setupUi(self)
 
@@ -32,6 +39,9 @@ class LoginDialog(QDialog, Ui_Dialog):
         self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Apply).clicked.connect(lambda: self.buttonBox_Apply_Clicked())
 
     def buttonBox_Abort_Clicked(self):
+        """
+        If the user clicks the Abort button, a warning message is displayed and the dialog is closed
+        """
         warning = QMessageBox()
         warning.setText("Login canceled")
         warning.setInformativeText("No further work possible...")
@@ -43,6 +53,9 @@ class LoginDialog(QDialog, Ui_Dialog):
                 self.done(QtWidgets.QDialogButtonBox.StandardButton.Abort.value)
 
     def buttonBox_Apply_Clicked(self):
+        """
+        It creates a config file with the user's email and password
+        """
         get_mail = MailIMAP(SMTPHost.gmail.value)
         try:
             get_mail.server_login(self.lineEmail.text(), self.linePassword.text())
@@ -57,6 +70,7 @@ class LoginDialog(QDialog, Ui_Dialog):
                 case QMessageBox.StandardButton.Ok:
                     return
 
+        os.makedirs('init')
         config = configparser.ConfigParser()
         config.add_section('Mail')
         config.set('Mail', 'mail_login', self.lineEmail.text())
