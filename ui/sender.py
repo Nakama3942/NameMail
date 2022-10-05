@@ -27,10 +27,11 @@ class Sender(QMainWindow, Ui_Sender):
         super(Sender, self).__init__()
         self.setupUi(self)
 
+        # It's a declaration of data to the letter header
         self.whoms: str = ""
         self.subject: str = ""
 
-        # Об'єданння графічних елементів зі слотами
+        # It's a tracking of button clicks in the window
         self.toolApplyWhom.clicked.connect(lambda: self.toolApplyWhom_Clicked())
         self.toolApplySubject.clicked.connect(lambda: self.toolApplySubject_Clicked())
         self.toolAddImage.clicked.connect(lambda: self.toolAddImage_Clicked())
@@ -39,6 +40,11 @@ class Sender(QMainWindow, Ui_Sender):
         self.buttSend.clicked.connect(lambda: self.buttSend_Clicked())
 
     def toolApplyWhom_Clicked(self):
+        """
+        It checks if the text in the line edit is empty, if it is, it displays a warning message box, if not, it disables
+        the line edit
+        :return: The return value is the value of the None if no expression was evaluated.
+        """
         if self.lineWhom.text() == "":
             warning = QMessageBox()
             warning.setText("Address missing")
@@ -58,6 +64,11 @@ class Sender(QMainWindow, Ui_Sender):
         self.checks_applies()
 
     def toolApplySubject_Clicked(self):
+        """
+        It checks if the subject line is empty, if it is, it displays a warning message, if it isn't, it disables the
+        subject line
+        :return: The return value is the value of the None if no expression was evaluated.
+        """
         if self.lineSubject.text() == "":
             warning = QMessageBox()
             warning.setText("Subject missing")
@@ -77,6 +88,10 @@ class Sender(QMainWindow, Ui_Sender):
         self.checks_applies()
 
     def checks_applies(self):
+        """
+        If the lineWhom and lineSubject are not enabled, then the textMessage is enabled and the textMessage_Changed
+        function is called
+        """
         if not self.lineWhom.isEnabled() and not self.lineSubject.isEnabled():
             self.textMessage.setEnabled(True)
             self.textMessage_Changed()
@@ -86,22 +101,36 @@ class Sender(QMainWindow, Ui_Sender):
                 self.buttSend.setEnabled(False)
 
     def toolAddImage_Clicked(self):
+        """
+        It opens a file dialog, sets the text of the imageAddress line edit to the path of the selected file, and
+        enables/disables the appropriate buttons
+        """
         self.imageAddress.setText(QFileDialog.getOpenFileName(self, caption="Selecting an image", filter="Images (*.png *.xpm *.jpg)")[0])
         self.toolAddImage.setEnabled(False)
         self.toolResetImage.setEnabled(True)
 
     def toolResetImage_Clicked(self):
+        """
+        It resets the image address text box and enables the add image button.
+        """
         self.imageAddress.setText("")
         self.toolAddImage.setEnabled(True)
         self.toolResetImage.setEnabled(False)
 
     def textMessage_Changed(self):
+        """
+        If the text box is not empty and the send button is disabled, enable the send button. If the text box is empty and
+        the send button is enabled, disable the send button
+        """
         if not self.textMessage.toPlainText() == "" and not self.buttSend.isEnabled():
             self.buttSend.setEnabled(True)
         if self.textMessage.toPlainText() == "" and self.buttSend.isEnabled():
             self.buttSend.setEnabled(False)
 
     def buttSend_Clicked(self):
+        """
+        It sends an email with an image attachment using the Gmail SMTP server
+        """
         gmail = MailSMTP(SMTPHost.gmail.value, SMTPPort.gmail.value)
         gmail.server_login(mail_login, mail_password)
         gmail.create_message(self.lineWhom.text().split(', '), self.lineSubject.text(), self.textMessage.toPlainText())
@@ -110,10 +139,11 @@ class Sender(QMainWindow, Ui_Sender):
         try:
             gmail.send()
         except AttributeError as error:
+            # If sending the letter failed because the recipient addresses were entered incorrectly -
+            # a window is displayed asking to correct the errors in the addresses
             gmail.close()
             warning = QMessageBox()
             warning.setText(str(error))
-            print(error)
             warning.setInformativeText("Try again: Please enter a valid recipient address")
             warning.setIcon(QMessageBox.Icon.Warning)
             warning.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Abort)
@@ -126,6 +156,7 @@ class Sender(QMainWindow, Ui_Sender):
                     return
         gmail.close()
 
+        # It's just a notification about the successful sending of the letter
         res = QMessageBox()
         res.setText("The letter has been sent")
         res.setIcon(QMessageBox.Icon.Information)

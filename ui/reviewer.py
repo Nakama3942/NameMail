@@ -27,17 +27,24 @@ class Reviewer(QMainWindow, Ui_Reviewer):
         super(Reviewer, self).__init__()
         self.setupUi(self)
 
+        # Connecting to the server and reads the full message
         get_mail = MailIMAP(SMTPHost.gmail.value)
         get_mail.server_login(mail_login, mail_password)
         get_mail.get_list()
         get_mail.get_message(number_mail)
+
+        # Forming a message
         message: str = ""
         if len(get_mail.message) > 1:
             get_mail.message = get_mail.message[1:]
         for item in get_mail.message:
             message += item
+
+        # Displaying the message
         self.labelFrom.setText(message_from)
         self.labelData.setText(message_data)
         self.labelSubject.setText(message_subject)
         self.textMail.setHtml(str(message))
+
+        # Closing the connection with the server
         get_mail.close()

@@ -25,9 +25,6 @@ from src.smtp import SMTPHost
 
 
 class LoginDialog(QDialog, Ui_LoginDialog):
-    """
-    The LoginDialog class inherits from the QDialog class and the Ui_Dialog class
-    """
     def __init__(self):
         """
         Initializes the dialog box class that is displayed if there is no configuration file
@@ -35,6 +32,7 @@ class LoginDialog(QDialog, Ui_LoginDialog):
         super(LoginDialog, self).__init__()
         self.setupUi(self)
 
+        # Tracing dialog button clicks
         self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Abort).clicked.connect(self.buttonBox_Abort_Clicked)
         self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Apply).clicked.connect(self.buttonBox_Apply_Clicked)
 
@@ -58,8 +56,10 @@ class LoginDialog(QDialog, Ui_LoginDialog):
         """
         get_mail = MailIMAP(SMTPHost.gmail.value)
         try:
+            # Trying to login
             get_mail.server_login(self.lineEmail.text(), self.linePassword.text())
         except:
+            # If the attempt is unsuccessful, a message is displayed asking you to try again
             warning = QMessageBox()
             warning.setText("Login failed")
             warning.setInformativeText("Incorrect login or password. Try again")
@@ -70,9 +70,11 @@ class LoginDialog(QDialog, Ui_LoginDialog):
                 case QMessageBox.StandardButton.Ok:
                     return
 
+        # Creating a directory if this is the first launch of the program
         if not os.path.exists('init'):
             os.makedirs('init')
 
+        # Saving data to a file, so you don't have to type it in every time
         config = configparser.ConfigParser()
         config.add_section('Mail')
         config.set('Mail', 'mail_login', self.lineEmail.text())

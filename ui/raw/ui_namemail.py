@@ -35,7 +35,7 @@ class Ui_NameMail(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.listLetters.setFont(font)
-        self.listLetters.setGridSize(QtCore.QSize(0, 100))
+        self.listLetters.setGridSize(QtCore.QSize(0, 125))
         self.listLetters.setBatchSize(100)
         self.listLetters.setObjectName("listLetters")
         self.verticalLayout.addWidget(self.listLetters)
