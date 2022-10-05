@@ -14,6 +14,7 @@
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+from PyQt6.QtGui import QPixmap
 
 from ui.raw.ui_sender import Ui_Sender
 
@@ -109,6 +110,11 @@ class Sender(QMainWindow, Ui_Sender):
         self.toolAddImage.setEnabled(False)
         self.toolResetImage.setEnabled(True)
 
+        # It's just a preview of the image
+        pixmap = QPixmap(self.imageAddress.text())
+        pixmap = pixmap.scaled(200, 200)
+        self.imagePixmap.setPixmap(pixmap)
+
     def toolResetImage_Clicked(self):
         """
         It resets the image address text box and enables the add image button.
@@ -116,6 +122,9 @@ class Sender(QMainWindow, Ui_Sender):
         self.imageAddress.setText("")
         self.toolAddImage.setEnabled(True)
         self.toolResetImage.setEnabled(False)
+
+        # Removing image from preview
+        self.imagePixmap.clear()
 
     def textMessage_Changed(self):
         """
@@ -132,31 +141,62 @@ class Sender(QMainWindow, Ui_Sender):
         It sends an email with an image attachment using the Gmail SMTP server
         """
         gmail = MailSMTP(SMTPHost.gmail.value, SMTPPort.gmail.value)
-        gmail.server_login(mail_login, mail_password)
+        gmail.server_login(mail_login, mail_password, self.checkAnonymous.isChecked())
         gmail.create_message(self.lineWhom.text().split(', '), self.lineSubject.text(), self.textMessage.toPlainText())
         if self.imageAddress.text() != "":
             gmail.add_image(self.imageAddress.text())
         try:
             gmail.send()
-        except AttributeError as error:
-            # If sending the letter failed because the recipient addresses were entered incorrectly -
-            # a window is displayed asking to correct the errors in the addresses
+        except TimeoutError as error:
             gmail.close()
-            warning = QMessageBox()
-            warning.setText(str(error))
-            warning.setInformativeText("Try again: Please enter a valid recipient address")
-            warning.setIcon(QMessageBox.Icon.Warning)
-            warning.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Abort)
-            ret: int = warning.exec()
-            match ret:
-                case QMessageBox.StandardButton.Ok:
-                    return
-                case QMessageBox.StandardButton.Abort:
-                    self.close()
-                    return
-        gmail.close()
+            self.TimeoutError_Message(error)
+        except AttributeError as error:
+            gmail.close()
+            self.AttributeError_Message(error)
+        else:
+            gmail.close()
+            self.Close_Message()
 
-        # It's just a notification about the successful sending of the letter
+    def TimeoutError_Message(self, error: TimeoutError):
+        """
+        If the host does not support anonymous mailing and it was not possible to send the letter - a
+        window is displayed with a request to repeat the operation (anonymous sending is automatically
+        disabled and blocked)
+        """
+        self.checkAnonymous.setChecked(False)
+        self.checkAnonymous.setEnabled(False)
+        inform = QMessageBox()
+        inform.setText(str(error))
+        inform.setInformativeText("Try again")
+        inform.setIcon(QMessageBox.Icon.Information)
+        inform.setStandardButtons(QMessageBox.StandardButton.Ok)
+        ret: int = inform.exec()
+        match ret:
+            case QMessageBox.StandardButton.Ok:
+                return
+
+    def AttributeError_Message(self, error: AttributeError):
+        """
+        If sending the letter failed because the recipient addresses were entered incorrectly -
+        a window is displayed asking to correct the errors in the addresses
+        """
+        warning = QMessageBox()
+        warning.setText(str(error))
+        warning.setInformativeText("Try again: Please enter a valid recipient address")
+        warning.setIcon(QMessageBox.Icon.Warning)
+        warning.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Abort)
+        ret: int = warning.exec()
+        match ret:
+            case QMessageBox.StandardButton.Ok:
+                return
+            case QMessageBox.StandardButton.Abort:
+                self.close()
+                return
+
+    def Close_Message(self):
+        """
+        It's just a notification about the successful sending of the letter
+        """
         res = QMessageBox()
         res.setText("The letter has been sent")
         res.setIcon(QMessageBox.Icon.Information)
