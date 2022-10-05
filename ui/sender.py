@@ -14,6 +14,7 @@
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+from PyQt6.QtCore import QDir
 from PyQt6.QtGui import QPixmap
 
 from ui.raw.ui_sender import Ui_Sender
@@ -106,7 +107,7 @@ class Sender(QMainWindow, Ui_Sender):
         It opens a file dialog, sets the text of the imageAddress line edit to the path of the selected file, and
         enables/disables the appropriate buttons
         """
-        self.imageAddress.setText(QFileDialog.getOpenFileName(self, caption="Selecting an image", filter="Images (*.png *.xpm *.jpg)")[0])
+        self.imageAddress.setText(QFileDialog.getOpenFileName(self, caption="Selecting an image", directory=str(QDir.homePath()), filter="Images (*.png *.xpm *.jpg)")[0])
         self.toolAddImage.setEnabled(False)
         self.toolResetImage.setEnabled(True)
 
