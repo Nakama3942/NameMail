@@ -18,13 +18,13 @@ import configparser
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
 
-from ui.raw.ui_logindialog import Ui_Dialog
+from ui.raw.ui_logindialog import Ui_LoginDialog
 
 from src.mail import MailIMAP
 from src.smtp import SMTPHost
 
 
-class LoginDialog(QDialog, Ui_Dialog):
+class LoginDialog(QDialog, Ui_LoginDialog):
     """
     The LoginDialog class inherits from the QDialog class and the Ui_Dialog class
     """
@@ -70,7 +70,8 @@ class LoginDialog(QDialog, Ui_Dialog):
                 case QMessageBox.StandardButton.Ok:
                     return
 
-        os.makedirs('init')
+        if not os.path.exists('init'):
+            os.makedirs('init')
         config = configparser.ConfigParser()
         config.add_section('Mail')
         config.set('Mail', 'mail_login', self.lineEmail.text())

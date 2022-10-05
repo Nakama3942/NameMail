@@ -9,18 +9,18 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(400, 250)
-        self.gridLayout_3 = QtWidgets.QGridLayout(Dialog)
+class Ui_LoginDialog(object):
+    def setupUi(self, LoginDialog):
+        LoginDialog.setObjectName("LoginDialog")
+        LoginDialog.resize(400, 250)
+        self.gridLayout_3 = QtWidgets.QGridLayout(LoginDialog)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.labelMessage = QtWidgets.QLabel(Dialog)
+        self.labelMessage = QtWidgets.QLabel(LoginDialog)
         self.labelMessage.setObjectName("labelMessage")
         self.verticalLayout.addWidget(self.labelMessage)
-        self.groupBox = QtWidgets.QGroupBox(Dialog)
+        self.groupBox = QtWidgets.QGroupBox(LoginDialog)
         self.groupBox.setObjectName("groupBox")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -40,30 +40,30 @@ class Ui_Dialog(object):
         self.gridLayout.addWidget(self.linePassword, 1, 1, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.groupBox)
-        self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
+        self.buttonBox = QtWidgets.QDialogButtonBox(LoginDialog)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Abort|QtWidgets.QDialogButtonBox.StandardButton.Apply)
         self.buttonBox.setCenterButtons(False)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
         self.gridLayout_3.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(LoginDialog)
+        QtCore.QMetaObject.connectSlotsByName(LoginDialog)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, LoginDialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.labelMessage.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:10pt;\">The application is not logged into the mail service. Please enter<br/>your account login and password of the mail application</span><br/>(<span style=\" font-weight:600;\">Account</span> &gt;&gt; <span style=\" font-weight:600;\">Security</span> &gt;&gt; <span style=\" font-weight:600;\">Account Login</span> &gt;&gt; <span style=\" font-weight:600;\">Application passwords</span>:<br/>in &quot;<span style=\" font-style:italic;\">Select an application</span>&quot; &quot;<span style=\" font-style:italic;\">mail</span>&quot; must beselected, and in &quot;<span style=\" font-style:italic;\">select device</span>&quot; the<br/>type must be selected device from which the program is launched)</p></body></html>"))
-        self.groupBox.setTitle(_translate("Dialog", "Login"))
-        self.label.setText(_translate("Dialog", "Mail address"))
-        self.label_2.setText(_translate("Dialog", "Password"))
+        LoginDialog.setWindowTitle(_translate("LoginDialog", "Login"))
+        self.labelMessage.setText(_translate("LoginDialog", "<html><head/><body><p><span style=\" font-size:10pt;\">The application is not logged into the mail service. Please enter<br/>your account login and password of the mail application</span><br/>(<span style=\" font-weight:600;\">Account</span> &gt;&gt; <span style=\" font-weight:600;\">Security</span> &gt;&gt; <span style=\" font-weight:600;\">Account Login</span> &gt;&gt; <span style=\" font-weight:600;\">Application passwords</span>:<br/>in &quot;<span style=\" font-style:italic;\">Select an application</span>&quot; &quot;<span style=\" font-style:italic;\">mail</span>&quot; must beselected, and in &quot;<span style=\" font-style:italic;\">select device</span>&quot; the<br/>type must be selected device from which the program is launched)</p></body></html>"))
+        self.groupBox.setTitle(_translate("LoginDialog", "Login"))
+        self.label.setText(_translate("LoginDialog", "Mail address"))
+        self.label_2.setText(_translate("LoginDialog", "Password"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
+    LoginDialog = QtWidgets.QDialog()
+    ui = Ui_LoginDialog()
+    ui.setupUi(LoginDialog)
+    LoginDialog.show()
     sys.exit(app.exec())

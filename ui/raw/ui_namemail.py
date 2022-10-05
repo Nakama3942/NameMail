@@ -44,10 +44,20 @@ class Ui_NameMail(object):
         self.menubar = QtWidgets.QMenuBar(NameMail)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
         self.menubar.setObjectName("menubar")
+        self.menureset = QtWidgets.QMenu(self.menubar)
+        self.menureset.setEnabled(False)
+        self.menureset.setObjectName("menureset")
         NameMail.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(NameMail)
         self.statusbar.setObjectName("statusbar")
         NameMail.setStatusBar(self.statusbar)
+        self.actionRelogin = QtGui.QAction(NameMail)
+        self.actionRelogin.setObjectName("actionRelogin")
+        self.actionRedownload = QtGui.QAction(NameMail)
+        self.actionRedownload.setObjectName("actionRedownload")
+        self.menureset.addAction(self.actionRelogin)
+        self.menureset.addAction(self.actionRedownload)
+        self.menubar.addAction(self.menureset.menuAction())
 
         self.retranslateUi(NameMail)
         QtCore.QMetaObject.connectSlotsByName(NameMail)
@@ -56,6 +66,9 @@ class Ui_NameMail(object):
         _translate = QtCore.QCoreApplication.translate
         NameMail.setWindowTitle(_translate("NameMail", "NameMail"))
         self.buttSend.setText(_translate("NameMail", "To write a letter"))
+        self.menureset.setTitle(_translate("NameMail", "reset"))
+        self.actionRelogin.setText(_translate("NameMail", "Relogin"))
+        self.actionRedownload.setText(_translate("NameMail", "Redownload"))
 
 
 if __name__ == "__main__":

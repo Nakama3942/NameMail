@@ -86,8 +86,29 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menureset">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>reset</string>
+    </property>
+    <addaction name="actionRelogin"/>
+    <addaction name="actionRedownload"/>
+   </widget>
+   <addaction name="menureset"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionRelogin">
+   <property name="text">
+    <string>Relogin</string>
+   </property>
+  </action>
+  <action name="actionRedownload">
+   <property name="text">
+    <string>Redownload</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
