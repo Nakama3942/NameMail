@@ -107,7 +107,23 @@ class Sender(QMainWindow, Ui_Sender):
         gmail.create_message(self.lineWhom.text().split(', '), self.lineSubject.text(), self.textMessage.toPlainText())
         if self.imageAddress.text() != "":
             gmail.add_image(self.imageAddress.text())
-        gmail.send()
+        try:
+            gmail.send()
+        except AttributeError as error:
+            gmail.close()
+            warning = QMessageBox()
+            warning.setText(str(error))
+            print(error)
+            warning.setInformativeText("Try again: Please enter a valid recipient address")
+            warning.setIcon(QMessageBox.Icon.Warning)
+            warning.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Abort)
+            ret: int = warning.exec()
+            match ret:
+                case QMessageBox.StandardButton.Ok:
+                    return
+                case QMessageBox.StandardButton.Abort:
+                    self.close()
+                    return
         gmail.close()
 
         res = QMessageBox()

@@ -102,6 +102,8 @@ class MailSMTP:
         except smtplib.SMTPSenderRefused:
             if self.anonymous:
                 raise TimeoutError("The server does not support the ability to send anonymous messages!")
+        except smtplib.SMTPRecipientsRefused:
+            raise AttributeError("Invalid recipient address: address does not exist!")
 
     def close(self):
         """
