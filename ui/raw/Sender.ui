@@ -55,6 +55,9 @@
                <pointsize>10</pointsize>
               </font>
              </property>
+             <property name="placeholderText">
+              <string notr="true">examle1@gmail.com, example2@gmail.com</string>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">

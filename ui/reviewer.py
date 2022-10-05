@@ -23,7 +23,7 @@ from src.config import mail_login, mail_password
 
 
 class Reviewer(QMainWindow, Ui_Reviewer):
-    def __init__(self, number_mail: int, message_from: str, message_subject: str):
+    def __init__(self, number_mail: int, message_from: str, message_data: str, message_subject: str):
         super(Reviewer, self).__init__()
         self.setupUi(self)
 
@@ -37,6 +37,7 @@ class Reviewer(QMainWindow, Ui_Reviewer):
         for item in get_mail.message:
             message += item
         self.labelFrom.setText(message_from)
+        self.labelData.setText(message_data)
         self.labelSubject.setText(message_subject)
         self.textMail.setHtml(str(message))
         get_mail.close()

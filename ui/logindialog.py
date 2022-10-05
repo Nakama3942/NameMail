@@ -35,8 +35,8 @@ class LoginDialog(QDialog, Ui_LoginDialog):
         super(LoginDialog, self).__init__()
         self.setupUi(self)
 
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Abort).clicked.connect(lambda: self.buttonBox_Abort_Clicked())
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Apply).clicked.connect(lambda: self.buttonBox_Apply_Clicked())
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Abort).clicked.connect(self.buttonBox_Abort_Clicked)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Apply).clicked.connect(self.buttonBox_Apply_Clicked)
 
     def buttonBox_Abort_Clicked(self):
         """
@@ -59,7 +59,7 @@ class LoginDialog(QDialog, Ui_LoginDialog):
         get_mail = MailIMAP(SMTPHost.gmail.value)
         try:
             get_mail.server_login(self.lineEmail.text(), self.linePassword.text())
-        except Exception:
+        except:
             warning = QMessageBox()
             warning.setText("Login failed")
             warning.setInformativeText("Incorrect login or password. Try again")
@@ -72,6 +72,7 @@ class LoginDialog(QDialog, Ui_LoginDialog):
 
         if not os.path.exists('init'):
             os.makedirs('init')
+
         config = configparser.ConfigParser()
         config.add_section('Mail')
         config.set('Mail', 'mail_login', self.lineEmail.text())

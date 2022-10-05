@@ -58,6 +58,7 @@ class NameMail(QMainWindow, Ui_NameMail):
         self.reviewer = None
         self.sender = None
         self.message_from: list[str] = []
+        self.message_data: list[str] = []
         self.message_subject: list[str] = []
 
         self.progressbar = QtWidgets.QProgressBar()
@@ -106,9 +107,11 @@ class NameMail(QMainWindow, Ui_NameMail):
         for item in get_mail.messages:
             count += 1
             item_from = str(email.header.make_header(email.header.decode_header(item['from'])))
+            item_data = str(email.header.make_header(email.header.decode_header(item['date'])))
             item_subject = str(email.header.make_header(email.header.decode_header(item['subject'])))
-            self.listLetters.addItem(QtWidgets.QListWidgetItem(f"{count}\nFrom : {item_from}\nSubject : {item_subject}"))
+            self.listLetters.addItem(QtWidgets.QListWidgetItem(f"{count}\nFrom : {item_from}\nData : {item_data}\nSubject : {item_subject}"))
             self.message_from.append(item_from)
+            self.message_data.append(item_data)
             self.message_subject.append(item_subject)
         self.menureset.setEnabled(True)
 
@@ -122,7 +125,10 @@ class NameMail(QMainWindow, Ui_NameMail):
         self.sender.show()
 
     def listLetters_Activated(self, number_item: int):
-        self.reviewer = Reviewer(number_item, self.message_from[number_item], self.message_subject[number_item])
+        self.reviewer = Reviewer(number_item,
+                                 self.message_from[number_item],
+                                 self.message_data[number_item],
+                                 self.message_subject[number_item])
         self.reviewer.show()
 
     def actionRelogin_Triggered(self):

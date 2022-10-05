@@ -40,6 +40,7 @@ class Ui_Sender(object):
         font = QtGui.QFont()
         font.setPointSize(10)
         self.lineWhom.setFont(font)
+        self.lineWhom.setPlaceholderText("examle1@gmail.com, example2@gmail.com")
         self.lineWhom.setObjectName("lineWhom")
         self.gridLayout.addWidget(self.lineWhom, 0, 1, 1, 1)
         self.lineSubject = QtWidgets.QLineEdit(self.groupBox)
