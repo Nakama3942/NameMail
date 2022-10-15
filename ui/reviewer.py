@@ -14,6 +14,8 @@
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtCore import QDir
+from PyQt6.QtGui import QIcon
 
 from ui.raw.ui_reviewer import Ui_Reviewer
 
@@ -26,6 +28,10 @@ class Reviewer(QMainWindow, Ui_Reviewer):
     def __init__(self, number_mail: int, message_from: str, message_data: str, message_subject: str):
         super(Reviewer, self).__init__()
         self.setupUi(self)
+
+        # Icon initialization
+        QDir.addSearchPath('icons', 'icons/')
+        self.setWindowIcon(QIcon('icons:Review_Icon.png'))
 
         # Connecting to the server and reads the full message
         get_mail = MailIMAP(SMTPHost.gmail.value)

@@ -1,0 +1,1 @@
+pyinstaller -F -w -i "N:\NameMail\icons\NameMail_Icon.ico" main.pyw

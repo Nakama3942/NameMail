@@ -23,7 +23,8 @@ import os
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal, QDir
+from PyQt6.QtGui import QIcon
 
 from ui.raw.ui_namemail import Ui_NameMail
 from ui.reviewer import Reviewer
@@ -60,6 +61,10 @@ class NameMail(QMainWindow, Ui_NameMail):
         super(NameMail, self).__init__()
         self.setupUi(self)
         self.REBOOT: bool = False
+
+        # Icon initialization
+        QDir.addSearchPath('icons', 'icons/')
+        self.setWindowIcon(QIcon('icons:NameMail_Icon.png'))
 
         # It's a declaration of other windows of the program
         self.reviewer = None

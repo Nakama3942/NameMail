@@ -17,6 +17,8 @@ import configparser
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
+from PyQt6.QtCore import QDir
+from PyQt6.QtGui import QIcon
 
 from ui.raw.ui_logindialog import Ui_LoginDialog
 
@@ -31,6 +33,10 @@ class LoginDialog(QDialog, Ui_LoginDialog):
         """
         super(LoginDialog, self).__init__()
         self.setupUi(self)
+
+        # Icon initialization
+        QDir.addSearchPath('icons', 'icons/')
+        self.setWindowIcon(QIcon('icons:LogIn_Icon.png'))
 
         # Tracing dialog button clicks
         self.buttonBox.button(QtWidgets.QDialogButtonBox.StandardButton.Abort).clicked.connect(self.buttonBox_Abort_Clicked)

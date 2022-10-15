@@ -28,19 +28,21 @@ The full text of the license can be found at the following [link](https://github
 > limitations under the License.
 
 ## Usage
-To start the program, just run *run.sh*.
+### With Python
+To start the program, just run *main.pyw*.
 
 But it is also possible to run the program through the console:
 ```shell
-python main.py
+python main.pyw
 ```
-Якщо програма видає помилку відсутності модулів при запуску, встановіть Qt:
-If the program gives a missing modules error at startup, install Qt:
+If the program gives a missing modules' error at startup, install Qt:
 ```shell
 pip install PyQt6
 # or
 pip install pyqt6
 ```
+### Without Python
+There is a compiled version of the program. To use it, simply download the archive in the binaries' section under the latest version release. Unzip the archive and then use it as a regular program.
 
 ## Authors
 <table align="center" style="border-width: 10; border-style: ridge">

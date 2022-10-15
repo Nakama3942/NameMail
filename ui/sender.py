@@ -15,7 +15,7 @@
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt6.QtCore import QDir
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QIcon
 
 from ui.raw.ui_sender import Ui_Sender
 
@@ -28,6 +28,10 @@ class Sender(QMainWindow, Ui_Sender):
     def __init__(self):
         super(Sender, self).__init__()
         self.setupUi(self)
+
+        # Icon initialization
+        QDir.addSearchPath('icons', 'icons/')
+        self.setWindowIcon(QIcon('icons:Sender_Icon.png'))
 
         # It's a declaration of data to the letter header
         self.whoms: str = ""
